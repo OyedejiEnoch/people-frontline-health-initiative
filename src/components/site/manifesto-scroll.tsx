@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -40,19 +41,11 @@ const TOKENS: Token[] = [
 export function ManifestoScroll() {
   const section = useRef<HTMLElement>(null);
   const kicker = useRef<HTMLParagraphElement>(null);
-  const chips = useRef<HTMLSpanElement[]>([]);
-  const words = useRef<HTMLSpanElement[]>([]);
-  const [enhanced, setEnhanced] = useState(false);
-
-  chips.current = [];
-  words.current = [];
-
-  useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isStatic = new URLSearchParams(window.location.search).has("static");
-    setEnhanced(desktop && !reduced && !isStatic);
-  }, []);
+  const desktop = useMediaQuery("(min-width: 1024px)");
+  const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const isStatic =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).has("static");
+  const enhanced = desktop && !reduced && !isStatic;
 
   useGSAP(
     () => {
@@ -61,17 +54,23 @@ export function ManifestoScroll() {
       const build = () => {
         const sEl = section.current!;
         const sRect = sEl.getBoundingClientRect();
-        const n = chips.current.length;
+        const chipEls = Array.from(
+          sEl.querySelectorAll<HTMLSpanElement>("[data-manifesto-chip]"),
+        );
+        const wordEls = Array.from(
+          sEl.querySelectorAll<HTMLSpanElement>("[data-manifesto-word]"),
+        );
+        const n = chipEls.length;
 
         // Measure each chip's natural (in-flow, scale 1) centre.
-        gsap.set(chips.current, { x: 0, y: 0, scale: 1 });
-        const inlineSize = chips.current[0]?.getBoundingClientRect().width || 44;
+        gsap.set(chipEls, { x: 0, y: 0, scale: 1 });
+        const inlineSize = chipEls[0]?.getBoundingClientRect().width || 44;
         const clusterSize = Math.min(sRect.width * 0.16, 190);
         const bigScale = clusterSize / inlineSize;
         const gap = clusterSize * 0.16;
         const totalW = n * clusterSize + (n - 1) * gap;
 
-        const deltas = chips.current.map((chip, i) => {
+        const deltas = chipEls.map((chip, i) => {
           const r = chip.getBoundingClientRect();
           const naturalX = r.left - sRect.left + r.width / 2;
           const naturalY = r.top - sRect.top + r.height / 2;
@@ -86,7 +85,7 @@ export function ManifestoScroll() {
         tl.fromTo(kicker.current, { opacity: 1, y: 0 }, { opacity: 0, y: -24, duration: 0.12 }, 0);
 
         // Chips fly from the centred cluster into their inline slots.
-        chips.current.forEach((chip, i) => {
+        chipEls.forEach((chip, i) => {
           tl.fromTo(
             chip,
             { x: deltas[i].x, y: deltas[i].y, scale: bigScale },
@@ -97,7 +96,7 @@ export function ManifestoScroll() {
 
         // Words resolve in, riding just behind the chips.
         tl.fromTo(
-          words.current,
+          wordEls,
           { opacity: 0, filter: "blur(6px)", y: 8 },
           { opacity: 1, filter: "blur(0px)", y: 0, stagger: 0.015, duration: 0.25 },
           0.5,
@@ -124,7 +123,16 @@ export function ManifestoScroll() {
           ScrollTrigger.getAll().forEach((st) => {
             if (st.trigger === section.current) st.kill();
           });
-          gsap.set([...chips.current, kicker.current, ...words.current], { clearProps: "all" });
+          const currentSection = section.current;
+          if (!currentSection) return;
+          gsap.set(
+            [
+              ...currentSection.querySelectorAll("[data-manifesto-chip]"),
+              kicker.current,
+              ...currentSection.querySelectorAll("[data-manifesto-word]"),
+            ],
+            { clearProps: "all" },
+          );
           build();
         }, 200);
       };
@@ -154,9 +162,7 @@ export function ManifestoScroll() {
             token.type === "word" ? (
               <span
                 key={i}
-                ref={(el) => {
-                  if (el) words.current.push(el);
-                }}
+                data-manifesto-word
                 className="inline-block"
               >
                 {token.text}
@@ -164,9 +170,7 @@ export function ManifestoScroll() {
             ) : (
               <span
                 key={i}
-                ref={(el) => {
-                  if (el) chips.current.push(el);
-                }}
+                data-manifesto-chip
                 className="inline-flex aspect-square h-[1.05em] w-[1.05em] shrink-0 items-center justify-center overflow-hidden rounded-full align-middle shadow-[0_6px_20px_-8px_rgb(var(--ink)/0.4)] will-change-transform md:h-[1.15em] md:w-[1.15em]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}

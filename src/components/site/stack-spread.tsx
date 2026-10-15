@@ -304,10 +304,19 @@ export function StackSpread({
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* centre text */}
         <motion.div
-          className="pointer-events-none absolute inset-0 z-[5] flex flex-col items-center justify-center px-6 text-center max-md:px-8"
+          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center max-md:px-8"
           style={{ opacity: copyOpacity, scale: noScale ? 1 : copyScale }}
         >
-          <h2 className="font-display w-full text-[4.6vw] font-semibold leading-[1.02] tracking-tight text-ink max-md:text-[10vw]">
+          {/* Soft paper halo so the headline stays legible over any card behind it. */}
+          <div
+            aria-hidden
+            className="absolute left-1/2 top-1/2 -z-10 h-[60vh] w-[86vw] -translate-x-1/2 -translate-y-1/2 md:w-[60vw]"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgb(var(--paper)) 0%, rgb(var(--paper)) 34%, rgb(var(--paper) / 0.85) 54%, transparent 75%)",
+            }}
+          />
+          <h2 className="font-display mx-auto w-full max-w-[88vw] text-[4.2vw] font-semibold leading-[1.05] tracking-tight text-ink md:max-w-[50vw] max-md:text-[10vw]">
             Behind every number,{" "}
             <span className="text-accent">a person.</span>
           </h2>
@@ -352,7 +361,7 @@ export function StackSpread({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="animate-bounce max-md:h-[4vw] max-md:w-[4vw]"
+              className="opacity-80 max-md:h-[4vw] max-md:w-[4vw]"
               aria-hidden="true"
             >
               <path d="m6 9 6 6 6-6" />

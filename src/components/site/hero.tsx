@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -27,16 +28,9 @@ export function Hero() {
         .from(".hero-actions", { y: 20, opacity: 0, duration: 0.7 }, "-=0.5")
         .from(".hero-cue", { opacity: 0, duration: 0.8 }, "-=0.4");
 
-      // Looping scroll-cue tick.
-      gsap.fromTo(
-        ".hero-tick",
-        { yPercent: -110 },
-        { yPercent: 260, duration: 1.7, ease: "power1.inOut", repeat: -1 },
-      );
-
       // Parallax: image drifts slower than scroll.
       gsap.to(".hero-image", {
-        yPercent: 18,
+        yPercent: 8,
         ease: "none",
         scrollTrigger: {
           trigger: root.current,
@@ -50,14 +44,16 @@ export function Hero() {
   );
 
   return (
-    <section ref={root} id="top" className="relative min-h-[100svh] w-full overflow-hidden bg-black">
+    <section ref={root} id="top" className="relative min-h-[min(60rem,100svh)] w-full overflow-hidden bg-black">
       {/* Background image */}
       <div className="absolute inset-0 -z-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={hero.image}
           alt={hero.imageAlt}
-          className="hero-image absolute inset-0 size-full scale-110 object-cover object-center brightness-[0.82]"
+          fill
+          priority
+          sizes="100vw"
+          className="hero-image scale-105 object-cover object-center brightness-[0.82]"
         />
         {/* Legibility washes */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/25" />
@@ -65,8 +61,8 @@ export function Hero() {
       </div>
 
       {/* Content — lower-third editorial */}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-container flex-col justify-end px-[5%] pb-16 pt-32 md:pb-24">
-        <div className="max-w-4xl">
+      <div className="relative z-10 mx-auto flex min-h-[min(60rem,100svh)] max-w-container flex-col justify-end px-[5%] pb-12 pt-32 md:pb-20">
+        <div className="max-w-[58rem]">
           <p className="hero-kicker mb-6 flex items-center gap-3 text-small font-medium uppercase tracking-[0.2em] text-paper/70">
             <span className="h-px w-8 bg-paper/40" />
             {hero.kicker}
@@ -81,7 +77,7 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="hero-body mt-8 max-w-xl text-large text-pretty text-paper/80">
+          <p className="hero-body mt-7 max-w-xl text-medium text-pretty text-paper/80 md:text-large">
             {hero.body}
           </p>
 
@@ -94,14 +90,25 @@ export function Hero() {
             </Button>
           </div>
         </div>
+
+        <div className="hero-body mt-12 grid max-w-3xl grid-cols-1 gap-px overflow-hidden rounded-[0.875rem] border border-paper/20 bg-paper/20 backdrop-blur-md sm:grid-cols-3 lg:absolute lg:bottom-20 lg:right-[5%] lg:mt-0 lg:w-[28rem] lg:grid-cols-1">
+          {[
+            ["Community-led", "Built with the people closest to the need"],
+            ["Evidence-informed", "Research and learning shape the response"],
+            ["Designed to last", "Local capacity remains after the project"],
+          ].map(([title, text]) => (
+            <div key={title} className="bg-ink/45 p-4 text-paper md:p-5">
+              <p className="text-small font-semibold">{title}</p>
+              <p className="mt-1 text-small leading-relaxed text-paper/65">{text}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Scroll cue */}
       <div className="hero-cue absolute bottom-8 right-[5%] z-10 hidden items-center gap-3 text-tiny uppercase tracking-[0.2em] text-paper/60 md:flex">
         Scroll
-        <span className="relative h-10 w-px overflow-hidden bg-paper/20">
-          <span className="hero-tick absolute inset-x-0 top-0 h-4 bg-paper/80" />
-        </span>
+        <span className="h-10 w-px bg-paper/35" />
       </div>
     </section>
   );

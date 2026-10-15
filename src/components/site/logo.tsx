@@ -26,7 +26,12 @@ export function Logo({
           People Frontline Health
           <span className={dot}>.</span>
         </span>
-        <span className="mt-1 block text-tiny font-medium uppercase tracking-[0.2em] text-muted">
+        <span
+          className={cn(
+            "mt-1 block text-tiny font-medium uppercase tracking-[0.2em]",
+            tone === "paper" ? "text-paper/55" : "text-muted",
+          )}
+        >
           Initiative
         </span>
       </span>

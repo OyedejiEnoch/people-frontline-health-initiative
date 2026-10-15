@@ -48,6 +48,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${bricolage.variable} ${hanken.variable}`}>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

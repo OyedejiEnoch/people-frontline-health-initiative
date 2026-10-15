@@ -24,7 +24,7 @@ export default function WhatWeDoPage() {
   return (
     <>
       <Navbar overDark />
-      <main className="w-full max-w-full overflow-x-clip">
+      <main id="main-content" className="w-full max-w-full overflow-x-clip">
         <PageHero
           image="/images/hero-outreach.jpg"
           imageAlt="A PFHI health worker delivering care at a community outreach"

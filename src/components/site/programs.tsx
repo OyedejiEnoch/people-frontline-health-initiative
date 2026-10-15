@@ -10,22 +10,24 @@ export function Programs() {
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const io = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.step));
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(Number((entry.target as HTMLElement).dataset.step));
+          }
         });
       },
       { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
     );
-    stepRefs.current.forEach((el) => el && io.observe(el));
-    return () => io.disconnect();
+
+    stepRefs.current.forEach((element) => element && observer.observe(element));
+    return () => observer.disconnect();
   }, []);
 
   return (
     <section id="programs" className="bg-paper-2 py-24 md:py-32 lg:py-40">
       <div className="mx-auto max-w-container px-[5%]">
-        {/* Header */}
         <div className="mb-14 flex flex-col justify-between gap-6 md:mb-20 md:flex-row md:items-end">
           <div className="max-w-2xl">
             <p
@@ -44,35 +46,37 @@ export function Programs() {
           </p>
         </div>
 
-        {/* Mobile: stacked cards */}
-        <div className="flex flex-col gap-6 lg:hidden">
-          {items.map((item) => (
-            <article
+        {/* Mobile: cinematic cards that stack on scroll */}
+        <div className="pb-4 lg:hidden">
+          {items.map((item, i) => (
+            <div
               key={item.no}
-              data-reveal
-              className="overflow-hidden rounded-card border border-ink/10 bg-paper"
+              className="sticky"
+              style={{ top: `calc(5rem + ${i * 1.1}rem)` }}
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
+              <article className="relative aspect-[4/5] overflow-hidden rounded-card bg-ink shadow-[0_24px_60px_-30px_rgb(var(--ink)/0.7)] ring-1 ring-ink/10">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.image} alt="" className="size-full object-cover" />
-                <span className="absolute left-4 top-4 font-display text-tiny font-semibold tracking-widest text-paper/90">
-                  {item.no}
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-h6 font-semibold text-ink">{item.title}</h3>
-                <p className="mt-3 text-regular text-pretty text-ink-2">{item.text}</p>
-              </div>
-            </article>
+                <img src={item.image} alt="" className="absolute inset-0 size-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/5" />
+                <div className="absolute inset-x-0 top-0 flex items-center justify-between p-6">
+                  <span className="font-display text-h5 font-semibold text-paper/90">{item.no}</span>
+                  <span className="text-tiny font-medium uppercase tracking-[0.2em] text-paper/55">
+                    {item.no} / 0{items.length}
+                  </span>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-6">
+                  <h3 className="text-h4 font-semibold text-balance text-paper">{item.title}</h3>
+                  <p className="mt-3 max-w-sm text-regular text-pretty text-paper/80">{item.text}</p>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
 
-        {/* Desktop: sticky visual + scrolling index */}
         <div className="hidden lg:grid lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          {/* Sticky visual */}
           <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
             <div className="relative aspect-[4/5] max-h-[80vh] w-full overflow-hidden rounded-card bg-ink">
-              {items.map((item, i) => (
+              {items.map((item, index) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={item.no}
@@ -80,11 +84,10 @@ export function Programs() {
                   alt=""
                   className={cn(
                     "absolute inset-0 size-full object-cover transition-[opacity,transform] duration-700 ease-out",
-                    i === active ? "scale-100 opacity-100" : "scale-105 opacity-0",
+                    index === active ? "scale-100 opacity-100" : "scale-105 opacity-0",
                   )}
                 />
               ))}
-              {/* Overlays */}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
               <span className="absolute left-8 top-8 font-display text-h4 font-semibold text-paper/90">
                 {items[active].no}
@@ -92,14 +95,13 @@ export function Programs() {
               <div className="absolute inset-x-8 bottom-8">
                 <h3 className="text-h4 font-semibold text-paper">{items[active].title}</h3>
               </div>
-              {/* Progress ticks */}
               <div className="absolute right-8 top-1/2 flex -translate-y-1/2 flex-col gap-2">
-                {items.map((item, i) => (
+                {items.map((item, index) => (
                   <span
                     key={item.no}
                     className={cn(
                       "h-6 w-0.5 rounded-full transition-colors duration-500",
-                      i === active ? "bg-paper" : "bg-paper/30",
+                      index === active ? "bg-paper" : "bg-paper/30",
                     )}
                   />
                 ))}
@@ -107,21 +109,20 @@ export function Programs() {
             </div>
           </div>
 
-          {/* Scrolling steps */}
           <div>
-            {items.map((item, i) => (
+            {items.map((item, index) => (
               <div
                 key={item.no}
-                data-step={i}
-                ref={(el) => {
-                  stepRefs.current[i] = el;
+                data-step={index}
+                ref={(element) => {
+                  stepRefs.current[index] = element;
                 }}
                 className="flex min-h-[88vh] flex-col justify-center"
               >
                 <span
                   className={cn(
                     "font-display text-h5 font-semibold tracking-tight transition-colors duration-500",
-                    i === active ? "text-ink" : "text-ink/25",
+                    index === active ? "text-accent" : "text-ink/25",
                   )}
                 >
                   {item.no}
@@ -129,7 +130,7 @@ export function Programs() {
                 <h3
                   className={cn(
                     "mt-4 text-h3 font-semibold text-balance transition-colors duration-500",
-                    i === active ? "text-ink" : "text-ink/30",
+                    index === active ? "text-ink" : "text-ink/30",
                   )}
                 >
                   {item.title}
@@ -137,7 +138,7 @@ export function Programs() {
                 <p
                   className={cn(
                     "mt-5 max-w-md text-medium text-pretty transition-colors duration-500",
-                    i === active ? "text-ink-2" : "text-ink/30",
+                    index === active ? "text-ink-2" : "text-ink/30",
                   )}
                 >
                   {item.text}

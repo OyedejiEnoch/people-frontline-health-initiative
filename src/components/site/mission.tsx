@@ -2,7 +2,7 @@ import { mission } from "@/lib/content";
 
 export function Mission() {
   return (
-    <section id="about" className="mx-auto max-w-container px-[5%] py-24 md:py-32 lg:py-40">
+    <section id="about" className="mx-auto max-w-container px-[5%] py-28 md:py-40 lg:py-48">
       <p
         data-reveal
         className="mb-10 flex items-center gap-3 text-small font-medium uppercase tracking-[0.2em] text-muted md:mb-14"
@@ -23,9 +23,9 @@ export function Mission() {
         </p>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-card border border-ink/10 bg-ink/10 md:mt-24 md:grid-cols-2">
+      <div className="mt-20 grid grid-cols-1 border-y border-ink/10 md:mt-32 md:grid-cols-2 md:divide-x md:divide-ink/10">
         {mission.points.map((point) => (
-          <div key={point.label} data-reveal className="bg-paper p-8 md:p-12">
+          <div key={point.label} data-reveal className="py-10 first:border-b first:border-ink/10 md:px-12 md:py-14 md:first:border-b-0 md:first:pl-0 md:last:pr-0">
             <h3 className="mb-4 text-h6 font-semibold text-ink">{point.label}</h3>
             <p className="text-medium text-pretty text-ink-2">{point.text}</p>
           </div>

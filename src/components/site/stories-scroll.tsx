@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -19,16 +20,13 @@ export function StoriesScroll({
 }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  // Start in "stack" so SSR + first client paint match; upgrade to the pinned
-  // horizontal experience only on desktop with motion allowed.
-  const [mode, setMode] = useState<"stack" | "pin">("stack");
-
-  useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isStatic = new URLSearchParams(window.location.search).has("static");
-    if (desktop && !reduced && !isStatic) setMode("pin");
-  }, []);
+  // initializeWithValue:false => first client render matches the server ("stack"),
+  // then upgrades to "pin" after mount. Prevents a hydration mismatch.
+  const desktop = useMediaQuery("(min-width: 1024px)", { initializeWithValue: false });
+  const reduced = useMediaQuery("(prefers-reduced-motion: reduce)", { initializeWithValue: false });
+  const isStatic =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).has("static");
+  const mode: "stack" | "pin" = desktop && !reduced && !isStatic ? "pin" : "stack";
 
   useGSAP(
     () => {
@@ -58,7 +56,7 @@ export function StoriesScroll({
   // ---- Pinned horizontal (desktop, motion) ----
   if (mode === "pin") {
     return (
-      <section ref={root} className="relative overflow-hidden bg-paper-2">
+      <section ref={root} className="relative overflow-hidden bg-paper">
         <div ref={track} className="flex h-screen items-center gap-8 pl-[5%] will-change-transform">
           {/* Leading title panel */}
           <div className="flex h-[68vh] w-[26rem] shrink-0 flex-col justify-end pr-8">
@@ -97,7 +95,7 @@ export function StoriesScroll({
 
   // ---- Stacked fallback (mobile, reduced motion, static) ----
   return (
-    <section ref={root} className="bg-paper-2 py-20 md:py-28">
+    <section ref={root} className="bg-paper py-24 md:py-36">
       <div className="mx-auto max-w-container px-[5%]">
         <div className="mb-10 max-w-2xl md:mb-14">
           <span className="mb-5 block h-px w-12 bg-ink/30" />

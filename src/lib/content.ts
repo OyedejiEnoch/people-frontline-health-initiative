@@ -12,10 +12,10 @@ export const nav = {
   links: [
     { title: "About", url: "/about" },
     { title: "What we do", url: "/what-we-do" },
-    { title: "Our impact", url: "/#impact" },
-    { title: "Get involved", url: "/#involve" },
+    // "Our impact" hidden until there are real results to show.
+    { title: "Get involved", url: "/get-involved" },
   ],
-  cta: { title: "Donate", url: "/#donate" },
+  cta: { title: "Donate", url: "/get-involved#donate" },
 };
 
 export const hero = {
@@ -70,7 +70,7 @@ export const programs = {
       no: "01",
       title: "Community health & outreach",
       text: "Mobile clinics, screening drives, and disease-prevention campaigns that meet people where they are — in rural villages and urban informal settlements.",
-      image: "/images/program-outreach.jpg",
+      image: "/images/community-outreach.webp",
       activities: [
         "Mobile clinics & health camps",
         "Community screening drives",
@@ -130,7 +130,7 @@ export const programs = {
       no: "06",
       title: "Capacity building & partnerships",
       text: "Empowering young people, frontline health workers, and local organizations with the skills, resources, and partnerships to lead.",
-      image: "/images/program-capacity.jpg",
+      image: "/images/capacity-partnerships.webp",
       activities: [
         "Frontline-worker training",
         "Youth development",
@@ -154,17 +154,68 @@ export const approach = {
   image: "/images/approach-community.jpg",
 };
 
+export const fieldCollage = {
+  kicker: "Close to home",
+  heading: "Care begins by being present.",
+  body:
+    "The strongest health programs are shaped close to everyday life — where families gather, children learn, and frontline workers already understand what gets in the way of care.",
+  points: [
+    {
+      title: "In community",
+      text: "We begin where life already happens — markets, clinics, schools, and places of worship — not in distant offices.",
+    },
+    {
+      title: "Alongside families",
+      text: "Families understand their own needs first. We shape care around them, rather than asking them to fit around us.",
+    },
+    {
+      title: "With local leaders",
+      text: "Frontline workers and local leaders already know the barriers. Our work builds on their knowledge — and strengthens it.",
+    },
+  ],
+};
+
+export const carePath = {
+  heading: "From listening to lasting change.",
+  intro:
+    "Our programs share one practical rhythm: understand the barrier, build with the people closest to it, deliver care, and strengthen what remains after the project ends.",
+  steps: [
+    {
+      no: "01",
+      title: "Listen closely",
+      text: "Start with community knowledge, lived experience, and the barriers people face in reaching care.",
+    },
+    {
+      no: "02",
+      title: "Co-create the response",
+      text: "Shape practical interventions with health workers, local leaders, partners, and the people they serve.",
+    },
+    {
+      no: "03",
+      title: "Bring care closer",
+      text: "Connect people to screening, education, referrals, tools, and support in places they can actually reach.",
+    },
+    {
+      no: "04",
+      title: "Learn and strengthen",
+      text: "Measure what changes, improve the model, and leave local capacity stronger than we found it.",
+    },
+  ],
+};
+
 export const impact = {
   heading: "Measured by lives, not logos",
   intro:
     "We hold ourselves to what actually changes: people reached, communities strengthened, and health systems that stand on their own.",
-  // PLACEHOLDER figures — replace with verified numbers before launch.
-  stats: [
-    { value: "40+", label: "Communities reached" },
-    { value: "25,000+", label: "People served" },
-    { value: "300+", label: "Frontline workers trained" },
-    { value: "18", label: "Partner organizations" },
-  ],
+  // Stats hidden until the milestones are real — uncomment and set verified
+  // figures once PFHI has achieved them.
+  stats: [] as { value: string; label: string }[],
+  // stats: [
+  //   { value: "40+", label: "Communities reached" },
+  //   { value: "25,000+", label: "People served" },
+  //   { value: "300+", label: "Frontline workers trained" },
+  //   { value: "18", label: "Partner organizations" },
+  // ],
   // PLACEHOLDER stories — replace with real, consented community stories.
   storiesHeading: "Stories from the frontline",
   stories: [
@@ -197,19 +248,43 @@ export const involve = {
       no: "01",
       title: "Donate",
       text: "Fund community programs that put care within reach of the people the system reaches last.",
-      cta: { title: "Give today", url: "#donate" },
+      detail:
+        "Every gift funds care that reaches people the system reaches last — screening drives, maternal support, frontline training, and the quiet logistics that make a clinic day possible. We put your giving where it changes the most lives.",
+      points: [
+        "Fund a community outreach day",
+        "Support maternal & child visits",
+        "Train a frontline health worker",
+        "Keep programs running between grants",
+      ],
+      cta: { title: "Give today", url: "#join" },
     },
     {
       no: "02",
       title: "Volunteer",
       text: "Lend your skills — clinical, technical, or organizational — to work that changes lives.",
-      cta: { title: "Join us", url: "#volunteer" },
+      detail:
+        "Whether your skills are clinical, technical, or organizational, there’s a place for you. We match volunteers to real needs — in the field and behind the scenes — and make your time count.",
+      points: [
+        "Clinical & allied health",
+        "Research & data",
+        "Communications & design",
+        "Events & logistics",
+      ],
+      cta: { title: "Join us", url: "#join" },
     },
     {
       no: "03",
       title: "Partner",
       text: "Government, donors, and organizations: let’s co-create scalable, evidence-based health solutions.",
-      cta: { title: "Start a conversation", url: "#partner" },
+      detail:
+        "Government, donors, and organizations: let’s co-create scalable, evidence-based health solutions. We bring grassroots trust and rigorous delivery; you bring reach and resources — together we go further.",
+      points: [
+        "Government & public health",
+        "Donors & foundations",
+        "NGOs & implementers",
+        "Corporate & academic",
+      ],
+      cta: { title: "Start a conversation", url: "#join" },
     },
   ],
 };
@@ -230,16 +305,16 @@ export const footer = {
       links: [
         { title: "About", url: "/about" },
         { title: "What we do", url: "/what-we-do" },
-        { title: "Our impact", url: "/#impact" },
+        { title: "Get involved", url: "/get-involved" },
         { title: "News & insights", url: "#" },
       ],
     },
     {
       title: "Get involved",
       links: [
-        { title: "Donate", url: "#donate" },
-        { title: "Volunteer", url: "#volunteer" },
-        { title: "Partner", url: "#partner" },
+        { title: "Donate", url: "/get-involved#donate" },
+        { title: "Volunteer", url: "/get-involved#volunteer" },
+        { title: "Partner", url: "/get-involved#partner" },
         { title: "Careers", url: "#" },
       ],
     },

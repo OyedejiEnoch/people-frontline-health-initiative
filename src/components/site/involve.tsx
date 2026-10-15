@@ -22,7 +22,7 @@ function Arrow({ className }: { className?: string }) {
 
 export function Involve() {
   return (
-    <section id="involve" className="mx-auto max-w-container px-[5%] py-24 md:py-32 lg:py-40">
+    <section id="involve" className="mx-auto max-w-container px-[5%] py-28 md:py-40 lg:py-48">
       <div className="mb-14 max-w-2xl md:mb-20">
         <p
           data-reveal
@@ -50,7 +50,7 @@ export function Involve() {
               className={cn(
                 "group flex min-h-[22rem] flex-col justify-between rounded-card p-8 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 md:p-10",
                 primary
-                  ? "bg-ink text-paper hover:shadow-[0_28px_70px_-28px_rgb(var(--ink)/0.6)]"
+                  ? "bg-accent text-accent-foreground hover:shadow-[0_28px_70px_-28px_rgb(var(--accent)/0.65)]"
                   : "border border-ink/12 bg-paper text-ink hover:shadow-[0_24px_60px_-24px_rgb(var(--ink)/0.25)]",
               )}
             >

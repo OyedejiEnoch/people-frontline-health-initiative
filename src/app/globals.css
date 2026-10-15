@@ -3,24 +3,19 @@
 @tailwind utilities;
 
 /*
-  PFHI design tokens.
-  TEMPORARY palette: an Elementis-inspired natural-green system (green-black ink
-  + warm oat-cream paper + sage bands + forest-green accent). This is a stand-in
-  until the client picks her own brand color. To revert to warm B/W, restore:
-    --paper 251 250 247; --paper-2 243 241 236; --ink 14 14 12;
-    --ink-2 58 58 54; --muted 107 107 99; --accent 14 14 12;
-  To move to the client's real brand color later, change --accent (and, if the
-  whole world should shift, --ink / --paper). Values are space-separated RGB
-  triplets so Tailwind can apply opacity.
+  PFHI design tokens: a high-contrast black-and-white foundation with one
+  deep health-green primary. Green is used as punctuation rather than a field:
+  actions, numbers, focus, and small moments of recognition. Large surfaces stay
+  white so documentary photography and people remain the emotional centre.
 */
 :root {
-  --paper: 239 237 228;        /* warm oat cream page */
-  --paper-2: 224 225 210;      /* light sage section band */
-  --ink: 35 43 38;             /* green-black text / dark surfaces */
-  --ink-2: 74 84 77;           /* secondary text (muted green) */
-  --muted: 92 100 90;          /* tertiary / captions (sage-gray, AA on oat) */
-  --accent: 48 82 62;          /* forest green — primary actions */
-  --accent-foreground: 242 240 231; /* cream text on accent */
+  --paper: 255 255 255;
+  --paper-2: 250 250 248;
+  --ink: 14 16 18;
+  --ink-2: 55 59 66;
+  --muted: 92 97 106;
+  --accent: 8 122 69;
+  --accent-foreground: 255 255 255;
 }
 
 @layer base {
@@ -32,12 +27,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    scroll-padding-top: 6.5rem;
   }
 
   body {
     background-color: rgb(var(--paper));
     color: rgb(var(--ink));
     font-family: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+    caret-color: rgb(var(--accent));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -49,6 +46,38 @@
     background-color: rgb(var(--ink));
     color: rgb(var(--paper));
   }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+  }
+
+  a,
+  button,
+  input,
+  select {
+    touch-action: manipulation;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--ink) / 0.35) rgb(var(--paper-2));
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgb(var(--paper-2));
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border: 3px solid rgb(var(--paper-2));
+    border-radius: 9999px;
+    background: rgb(var(--ink) / 0.35);
+  }
 }
 
 @layer components {
@@ -58,6 +87,24 @@
     width: 100%;
     margin-inline: auto;
     max-width: 80rem;
+  }
+
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 9999;
+    transform: translateY(-160%);
+    border-radius: 9999px;
+    background: rgb(var(--paper));
+    color: rgb(var(--ink));
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
   }
 }
 
@@ -88,12 +135,9 @@
   }
 }
 
-/* Motion baseline: elements marked for reveal start hidden, unless the
-   visitor prefers reduced motion (then everything is shown immediately). */
-[data-reveal] {
-  opacity: 0;
-  will-change: transform, opacity;
-}
+/* Content is visible by default. JavaScript applies the reveal start state in
+   a layout effect, so a failed script can never hide the page. */
+[data-reveal] { will-change: transform, opacity; }
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     opacity: 1 !important;
@@ -105,6 +149,23 @@
   }
   html {
     scroll-behavior: auto;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  header > div {
+    background: rgb(var(--paper)) !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 3px;
+  }
+
+  header > div {
+    border-color: currentColor !important;
   }
 }
 

@@ -41,7 +41,7 @@ export function AboutHero() {
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="animate-bounce"
+            className="opacity-80"
             aria-hidden="true"
           >
             <path d="m6 9 6 6 6-6" />

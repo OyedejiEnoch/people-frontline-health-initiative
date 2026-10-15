@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const relumeTailwind = require("@relume_io/relume-tailwind");
+
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-  presets: [require("@relume_io/relume-tailwind")],
+  presets: [relumeTailwind],
   theme: {
     extend: {
       // Re-point gradients so from-*/via-*/to-* keep working for our colors.

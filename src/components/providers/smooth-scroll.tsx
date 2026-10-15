@@ -32,6 +32,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       // Global scroll-reveal for anything tagged [data-reveal].
       // Batched so hundreds of elements share a handful of ScrollTriggers.
       if (!prefersReduced) {
+        gsap.set("[data-reveal]", { opacity: 0, y: 20 });
         ScrollTrigger.batch("[data-reveal]", {
           start: "top 88%",
           once: true,
@@ -39,14 +40,12 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
             gsap.to(batch, {
               opacity: 1,
               y: 0,
-              duration: 0.9,
+              duration: 0.7,
               ease: "power3.out",
-              stagger: 0.09,
+              stagger: 0.05,
               overwrite: true,
             }),
         });
-        gsap.set("[data-reveal]", { y: 28 });
-
         // Image reveal masks: uncover from the bottom with a subtle push.
         // Guarded so pages without any masked images don't warn.
         if (document.querySelector("[data-reveal-mask]")) {
@@ -59,11 +58,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
               batch.forEach((el) => {
                 gsap.to(el, {
                   clipPath: "inset(0% 0% 0% 0%)",
-                  duration: 1.1,
+                  duration: 0.9,
                   ease: "power3.out",
                 });
                 const img = el.querySelector("img");
-                if (img) gsap.to(img, { scale: 1, duration: 1.3, ease: "power3.out" });
+                if (img) gsap.to(img, { scale: 1, duration: 1.05, ease: "power3.out" });
               }),
           });
         }

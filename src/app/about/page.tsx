@@ -34,7 +34,7 @@ export default function AboutPage() {
   return (
     <>
       <Navbar overDark />
-      <main className="w-full max-w-full overflow-x-clip">
+      <main id="main-content" className="w-full max-w-full overflow-x-clip">
         <AboutHero />
         <ManifestoScroll />
         <AboutIndex />
